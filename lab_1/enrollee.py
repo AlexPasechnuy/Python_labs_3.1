@@ -1,5 +1,7 @@
 import _sqlite3
 
+from lab_1.exam import Exam
+
 class Enrollee:
     def __init__(self, id):
         self.con = _sqlite3.connect("exams.db")
@@ -38,16 +40,18 @@ class Enrollee:
         con.close()
 
     def delete(self):
-        self.cur.execute("DELETE FROM enrolee WHERE enrollee_id = ?", self.id)
+        self.cur.execute("DELETE FROM enrollee WHERE enrollee_id = ?", (self.id,))
+        self.con.commit()
 
     def change_address(self, new_addr):
         self.cur.execute("""UPDATE enrollee
         SET address = ?
         WHERE enrollee_id = ?""", (new_addr, self.id))
+        self.con.commit()
 
     # works
     def to_string(self):
-        return str(self.id) + ". " + self.surname + " " + self.name + " " + self.patronymic + '\n'\
+        return self.surname + " " + self.name + " " + self.patronymic + '\n'\
                + self.address + '\n' + self.birthday + '\n' + self.passport
 
     # works
@@ -82,12 +86,11 @@ class Enrollee:
 
     def get_exams(self):
         self.cur.execute("SELECT * FROM exam WHERE enrollee_id = ?", (self.id,))
-        arr = self.cur.fetch_all()
+        arr = self.cur.fetchall()
+        exams = []
         for rec in arr:
-            print(rec[2] + "; " + rec[1] + "; " + rec["status"] + "; " + rec["score"] + '\n')
-            self.cur.execute("SELECT surname, name, patronymic FROM examiner WHERE examiner_id = ?", rec["examiner_id"])
-            examiner = self.cur.fetchall()
-            print("Examiner: " + examiner[0]["surname"] + " " + examiner[0]["name"] + " " + examiner[0]["patronymic"] + '\n')
+            exams.append(Exam(rec[0], rec[1], rec[2], rec[3], rec[4], rec[5], rec[6]))
+        return exams
 
     # works
     def __del__(self):

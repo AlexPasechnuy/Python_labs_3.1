@@ -1,5 +1,7 @@
 import _sqlite3
 
+from lab_1.exam import Exam
+
 class Examiner:
     # works
     def __init__(self, id):
@@ -35,7 +37,7 @@ class Examiner:
         con.close()
 
     def delete(self):
-        self.cur.execute("DELETE FROM examiner WHERE examiner_id = ?",self.id)
+        self.cur.execute("DELETE FROM examiner WHERE examiner_id = ?",(self.id,))
         self.con.commit()
 
     def change_payment(self, new_payment):
@@ -46,7 +48,7 @@ class Examiner:
 
     # works
     def to_string(self):
-        return str(self.id) + ". " + self.surname + " " + self.name + " " + self.patronymic + '\n' \
+        return self.surname + " " + self.name + " " + self.patronymic + '\n' \
                + "Payment: " + str(self.payment)
 
     # works
@@ -82,12 +84,10 @@ class Examiner:
     def get_exams(self):
         self.cur.execute("SELECT * FROM exam WHERE examiner_id = ?", (self.id,))
         arr = self.cur.fetchall()
+        exams = []
         for rec in arr:
-            print(rec["exam_name"] + "; " + rec["pass_time"] + "; " + rec["status"] + "; " + rec["score"] + '\n')
-            self.cur.execute("SELECT surname, name, patronymic FROM enrollee WHERE enrollee_id = ?", (rec["enrollee_id"],))
-            enrollee = self.cur.fetchall()
-            print("Examiner: " + enrollee[0]["surname"] + " " + enrollee[0]["name"] + " " + enrollee[0]["patronymic"] + '\n')
-
+            exams.append(Exam(rec[0], rec[1], rec[2], rec[3], rec[4], rec[5], rec[6]))
+        return exams
     # works
     def __del__(self):
         self.cur.close()

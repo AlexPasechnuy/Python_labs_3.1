@@ -40,17 +40,19 @@ class Exam:
 
     def finish(self, score):
         self.cur.execute("""UPDATE exam
-        SET status = "FINISHED",
+        SET status = "PASSED",
             score = ?
         WHERE exam_id = ?""", (score, self.id))
+        self.con.commit()
 
     def change_time(self, new_time):
         self.cur.execute("""UPDATE exam
-        SET time = ?
-        WHERE exam_id = ?""", new_time, self.id)
+        SET pass_time = ?
+        WHERE exam_id = ?""", (new_time, self.id))
+        self.con.commit()
 
     def to_string(self):
-        res = str(self.id) + ". " + self.exam_name + "; " + self.pass_time + "; " + self.status + "; " + str(self.score) + '\n';
+        res = self.exam_name + "; " + self.pass_time + "; " + self.status + "; " + str(self.score) + '\n';
         self.cur.execute("SELECT surname, name, patronymic FROM enrollee WHERE enrollee_id = ?", (self.enrollee_id,))
         arr = self.cur.fetchall()
         res += "Enrollee: " + arr[0][0] + " " + arr[0][1] + " " + arr[0][2] + '\n'
