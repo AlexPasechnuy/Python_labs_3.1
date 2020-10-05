@@ -1,6 +1,6 @@
 import _sqlite3
 
-from lab_1.exam import Exam
+from lab_1.Model.exam import Exam
 
 class Enrollee:
     def __init__(self, id):
@@ -16,7 +16,6 @@ class Enrollee:
         self.birthday = arr[0]["birthday"]
         self.passport = arr[0]["passport"]
 
-    # works
     def __init__(self, id, surname, name, patronymic, address, birthday, passport):
         self.con = _sqlite3.connect("exams.db")
         self.cur = self.con.cursor()
@@ -28,7 +27,6 @@ class Enrollee:
         self.birthday = birthday
         self.passport = passport
 
-    # works
     @staticmethod
     def create(surname, name, patronymic, address, birthday, passport):
         con = _sqlite3.connect("exams.db")
@@ -49,12 +47,10 @@ class Enrollee:
         WHERE enrollee_id = ?""", (new_addr, self.id))
         self.con.commit()
 
-    # works
     def to_string(self):
         return self.surname + " " + self.name + " " + self.patronymic + '\n'\
                + self.address + '\n' + self.birthday + '\n' + self.passport
 
-    # works
     @staticmethod
     def findBySurname(sur):
         con = _sqlite3.connect("exams.db")
@@ -69,7 +65,6 @@ class Enrollee:
         con.close()
         return enrollees
 
-    # works
     @staticmethod
     def all():
         con = _sqlite3.connect("exams.db")
@@ -92,7 +87,6 @@ class Enrollee:
             exams.append(Exam(rec[0], rec[1], rec[2], rec[3], rec[4], rec[5], rec[6]))
         return exams
 
-    # works
     def __del__(self):
         self.cur.close()
         self.con.close()
