@@ -1,9 +1,9 @@
 import datetime
 
-from lab_1.Model.exam import Exam
-from lab_1.Model.enrollee import Enrollee
-from lab_1.Model.examiner import Examiner
-from lab_1.UI.functions import *
+from Model.exam import Exam
+from Model.enrollee import Enrollee
+from Model.examiner import Examiner
+from UI.functions import *
 
 def manipulate_exam(exam):
     while True:

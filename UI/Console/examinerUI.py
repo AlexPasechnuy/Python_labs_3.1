@@ -1,5 +1,5 @@
-from lab_1.Model.examiner import Examiner
-from lab_1.UI.functions import *
+from Model.examiner import Examiner
+from UI.functions import *
 
 def manipulate_examiner(examiner):
     while True:

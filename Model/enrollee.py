@@ -1,6 +1,6 @@
 import _sqlite3
 
-from lab_1.Model.exam import Exam
+from Model.exam import Exam
 
 class Enrollee:
     def __init__(self, id):

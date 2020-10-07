@@ -1,6 +1,6 @@
-from lab_1.UI.Console.enrolleeUI import *
-from lab_1.UI.Console.examinerUI import *
-from lab_1.UI.Console.examUI import *
+from UI.Console.enrolleeUI import *
+from UI.Console.examinerUI import *
+from UI.Console.examUI import *
 
 def main_menu():
     while True:

@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from lab_1.Model.enrollee import Enrollee
-from lab_1.UI.functions import *
+from Model.enrollee import Enrollee
+from UI.functions import *
 
 def manipulate_enrollee(enrollee):
     while True:
