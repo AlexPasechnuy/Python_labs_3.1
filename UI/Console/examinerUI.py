@@ -17,6 +17,7 @@ def manipulate_examiner(examiner):
             elif res == 3:
                 examiner.delete()
                 del examiner
+                print("Examiner deleted")
                 return
             elif res ==-1:
                 return
@@ -35,6 +36,7 @@ def all_examiners():
             res = int(input("Enter number of selected examiner or '-1' to go back: "))
             if res > 0 and res <= len(examiners):
                 manipulate_examiner(examiners[res - 1])
+                return
             elif res == -1:
                 return
             else:

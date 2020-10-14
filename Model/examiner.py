@@ -35,6 +35,7 @@ class Examiner:
 
     def delete(self):
         self.cur.execute("DELETE FROM examiner WHERE examiner_id = ?",(self.id,))
+        self.cur.execute("DELETE FROM exam  WHERE examiner_id = ?", (self.id,))
         self.con.commit()
 
     def change_payment(self, new_payment):

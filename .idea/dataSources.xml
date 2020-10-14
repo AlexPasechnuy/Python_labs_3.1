@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="exams" uuid="c965612c-6889-49f6-b730-d47533b67a01">
+    <data-source source="LOCAL" name="exams.db" uuid="36f94902-b1f1-4e19-91c6-7bb7b890c50a">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Alex\Work\Study\Programming\Python\Labs_3.1\lab_1\exams.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/UI/Console/exams.db</jdbc-url>
     </data-source>
   </component>
 </project>

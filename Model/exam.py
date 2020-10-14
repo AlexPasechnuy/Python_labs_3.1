@@ -36,7 +36,8 @@ class Exam:
         con.close()
 
     def delete(self):
-        self.cur.execute("DELETE FROM exam WHERE exam_id = ?", self.id)
+        self.cur.execute("DELETE FROM exam WHERE exam_id = ?", (self.id,))
+        self.con.commit()
 
     def finish(self, score):
         self.cur.execute("""UPDATE exam

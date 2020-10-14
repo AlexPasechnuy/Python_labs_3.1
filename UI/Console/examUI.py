@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from Model.exam import Exam
 from Model.enrollee import Enrollee
@@ -21,6 +21,7 @@ def manipulate_exam(exam):
             elif res == 3:
                 exam.delete()
                 del exam
+                print("Exam deleted")
                 return
             elif res ==-1:
                 return
@@ -88,7 +89,7 @@ def add_exam():
                 print_arr(enrollees)
                 user_input = int(input("Enter number of selected enrollee, or '-1' to stop adding exam: "))
                 if user_input >= 0 or user_input < len(enrollees):
-                    enrollee_id = user_input
+                    enrollee_id = enrollees[user_input - 1].id
                     break
                 elif user_input == -1:
                     return
@@ -105,7 +106,7 @@ def add_exam():
                 print_arr(examiners)
                 user_input = int(input("Enter number of selected examiner, or '-1' to stop adding exam: "))
                 if user_input >= 0 or user_input < len(examiners):
-                    examiner_id = user_input
+                    examiner_id = examiners[user_input - 1].id
                     break
                 elif user_input == -1:
                     return

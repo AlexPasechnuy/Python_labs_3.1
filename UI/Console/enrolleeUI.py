@@ -19,8 +19,9 @@ def manipulate_enrollee(enrollee):
             elif res == 3:
                 enrollee.delete()
                 del enrollee
+                print("Enrollee deleted")
                 return
-            elif res ==-1:
+            elif res == -1:
                 return
             else:
                 print("Incorrect input")
@@ -37,6 +38,7 @@ def all_enrollees():
             res = int(input("Enter number of selected enrollee or '-1' to go back: "))
             if res > 0 and res <= len(enrollees):
                 manipulate_enrollee(enrollees[res - 1])
+                return
             if res == -1:
                 return
             else:
@@ -55,6 +57,7 @@ def find_enrollee():
             res = int(input("Enter number of selected enrollee or '-1' to go back: "))
             if res > 0 and res <= len(enrollees):
                 manipulate_enrollee(enrollees[res - 1])
+                return
             elif res == -1:
                 return
             else:

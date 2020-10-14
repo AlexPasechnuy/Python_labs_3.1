@@ -39,6 +39,7 @@ class Enrollee:
 
     def delete(self):
         self.cur.execute("DELETE FROM enrollee WHERE enrollee_id = ?", (self.id,))
+        self.cur.execute("DELETE FROM exam WHERE enrollee_id = ?", (self.id,))
         self.con.commit()
 
     def change_address(self, new_addr):
