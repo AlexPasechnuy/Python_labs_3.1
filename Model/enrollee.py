@@ -49,8 +49,8 @@ class Enrollee:
         self.con.commit()
 
     def to_string(self):
-        return self.surname + " " + self.name + " " + self.patronymic + '\n'\
-               + self.address + '\n' + self.birthday + '\n' + self.passport
+        return self.surname + " " + self.name + " " + self.patronymic + '; \n'\
+               + self.address + '; \n' + self.birthday + '; \n' + self.passport
 
     @staticmethod
     def findBySurname(sur):

@@ -4,7 +4,7 @@ from tkinter.ttk import *
 
 from UI.GUI.page import Page
 
-class Exam(Page):
+class ExamPage(Page):
    def __init__(self, *args, **kwargs):
        Page.__init__(self, *args, **kwargs)
 

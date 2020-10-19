@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from Model.enrollee import Enrollee
-from UI.functions import *
+from UI.functions import print_arr
 
 def manipulate_enrollee(enrollee):
     while True:

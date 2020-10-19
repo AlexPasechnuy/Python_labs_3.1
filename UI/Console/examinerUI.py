@@ -1,5 +1,5 @@
 from Model.examiner import Examiner
-from UI.functions import *
+from UI.functions import print_arr
 
 def manipulate_examiner(examiner):
     while True:

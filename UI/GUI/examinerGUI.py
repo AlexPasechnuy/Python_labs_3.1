@@ -3,7 +3,7 @@ from tkinter.ttk import Notebook
 
 from UI.GUI.page import Page
 
-class Examiner(Page):
+class ExaminerPage(Page):
    def __init__(self, *args, **kwargs):
        Page.__init__(self, *args, **kwargs)
 
