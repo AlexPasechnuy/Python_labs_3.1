@@ -45,7 +45,7 @@ class Examiner:
         self.con.commit()
 
     def to_string(self):
-        return self.surname + " " + self.name + " " + self.patronymic + '\n' \
+        return self.surname + " " + self.name + " " + self.patronymic + '; \n' \
                + "Payment: " + str(self.payment)
 
     @staticmethod

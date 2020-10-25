@@ -26,7 +26,10 @@ class Exam:
         self.examiner_id = examiner_id
 
     @staticmethod
-    def create(pass_time , exam_name , score , status , enrollee_id , examiner_id):
+    def create(pass_time , exam_name , score, enrollee_id , examiner_id):
+        status = "Passed"
+        if score == None:
+            status = "Planned"
         con = _sqlite3.connect("exams.db")
         cur = con.cursor()
         cur.execute("""INSERT INTO exam(pass_time, exam_name, score, status, enrollee_id, examiner_id)
@@ -53,10 +56,13 @@ class Exam:
         self.con.commit()
 
     def to_string(self):
-        res = self.exam_name + "; " + self.pass_time + "; " + self.status + "; " + str(self.score) + '\n';
+        res = self.exam_name + "; " + self.pass_time + "; "
+        res += self.status + "; "
+        if self.status == "PASSED":
+            res += str(self.score) + ' points; '
         self.cur.execute("SELECT surname, name, patronymic FROM enrollee WHERE enrollee_id = ?", (self.enrollee_id,))
         arr = self.cur.fetchall()
-        res += "Enrollee: " + arr[0][0] + " " + arr[0][1] + " " + arr[0][2] + '\n'
+        res += "\n Enrollee: " + arr[0][0] + " " + arr[0][1] + " " + arr[0][2] + '; \n'
         self.cur.execute("SELECT surname, name, patronymic FROM examiner WHERE examiner_id = ?", (self.examiner_id,))
         arr = self.cur.fetchall()
         res += "Examiner: " + arr[0][0] + " " + arr[0][1] + " " + arr[0][2]

@@ -69,15 +69,12 @@ def add_exam():
     try:
         pass_time = datetime.strptime(input("Enter time of pass(DD.MM.YYYY HH:MM): "), '%d.%m.%Y %H:%M').strftime('%d.%m.%Y %H:%M')
         exam_name = input("Enter name of exam: ")
-        status = "PLANNED"
         score = input("Enter score of exam: ")
         enrollee_id = 0
         examiner_id = 0
-        if score == "":
-            score = None
-        else:
+        score = None
+        if score != "":
             score = int(score)
-            status = "PASSED"
         while True:                         #select enrollee by surname
             enrollee_surn = input("Enter surname of enrollee: ")
             if enrollee_surn == "-1":
@@ -112,7 +109,7 @@ def add_exam():
                     return
                 else:
                     print("Incorrect input")
-        Exam.create(pass_time, exam_name, score, status, enrollee_id, examiner_id)
+        Exam.create(pass_time, exam_name, score, enrollee_id, examiner_id)
     except:
         print("Error")
 
