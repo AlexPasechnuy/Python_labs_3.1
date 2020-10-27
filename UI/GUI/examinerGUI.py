@@ -86,8 +86,47 @@ class ExaminerPage(Page):
 
     def all_list_on_click(self, event):
         cs = self.all_listbox.curselection()
-        messagebox.showinfo("Title", self.all_list[cs[0]].to_string())
+        self.manipulateExaminer(self.all_list[cs[0]])
 
     def find_list_on_click(self, event):
         cs = self.find_listbox.curselection()
-        messagebox.showinfo("Title", self.find_list[cs[0]].to_string())
+        self.manipulateExaminer(self.find_list[cs[0]])
+
+    def manipulateExaminer(self, chosenExaminer):
+        newWindow = Toplevel(self)
+        newWindow.title("New Window")
+        newWindow.geometry("1000x500")
+        exams = Frame(newWindow)
+        exams.pack(side=LEFT, fill=Y)
+        Label(exams, text="Exams of examiner:").pack()
+        exams_listbox = Listbox(exams, width=106)
+        for person in chosenExaminer.get_exams():
+            exams_listbox.insert(END, person.to_string())
+        exams_listbox.pack(side=LEFT, fill="both", expand=True)
+        change = Frame(newWindow)
+        change.pack(side=RIGHT, fill="both")
+        Label(change, text = "Change address").grid(row = 0, columnspan = 2)
+        Label(change, text="Enter new address: ").grid(row = 1, column = 0)
+        new_sal = Entry(change, width = "39")
+        new_sal.delete(0, END)
+        new_sal.insert(0, chosenExaminer.payment)
+        new_sal.grid(row = 1, column = 1)
+        change_sal = partial(self.change_salary, new_sal, chosenExaminer)
+        change_sal_btn = Button(change, text = "Change salary", command=change_sal)
+        change_sal_btn.grid(columnspan = 2)
+        Label(change, text="------------------------------------------------------------").grid(columnspan = 2)
+        delete = partial(self.delete_examiner, chosenExaminer)
+        del_btn = Button(change, text = "Delete examiner", command=delete)
+        del_btn.grid(columnspan = 2)
+
+    def change_salary(self, sal_entry, chosenEnrollee):
+        chosenEnrollee.change_payment(int(sal_entry.get()))
+        self.update_all(self.all_listbox)
+
+    def delete_examiner(self, chosenExaminer):
+        result = messagebox.askquestion("Delete", "Are You Sure?", icon='warning')
+        if result == 'yes':
+            chosenExaminer.delete();
+        else:
+            return
+        self.update_all(self.all_listbox)

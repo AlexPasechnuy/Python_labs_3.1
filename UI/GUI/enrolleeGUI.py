@@ -97,8 +97,47 @@ class EnrolleePage(Page):
 
     def all_list_on_click(self, event):
         cs = self.all_listbox.curselection()
-        messagebox.showinfo("Title", self.all_list[cs[0]].to_string())
+        self.manipulateEnrollee(self.all_list[cs[0]])
 
     def find_list_on_click(self, event):
         cs = self.find_listbox.curselection()
-        messagebox.showinfo("Title", self.find_list[cs[0]].to_string())
+        self.manipulateEnrollee(self.find_list[cs[0]])
+
+    def manipulateEnrollee(self, chosenEnrollee):
+        newWindow = Toplevel(self)
+        newWindow.title("New Window")
+        newWindow.geometry("1000x500")
+        exams = Frame(newWindow)
+        exams.pack(side=LEFT, fill=Y)
+        Label(exams, text="Exams of enrollee:").pack()
+        exams_listbox = Listbox(exams, width=106)
+        for person in chosenEnrollee.get_exams():
+            exams_listbox.insert(END, person.to_string())
+        exams_listbox.pack(side=LEFT, fill="both", expand=True)
+        change = Frame(newWindow)
+        change.pack(side=RIGHT, fill="both")
+        Label(change, text = "Change address").grid(row = 0, columnspan = 2)
+        Label(change, text="Enter new address: ").grid(row = 1, column = 0)
+        new_addr = Entry(change, width = "39")
+        new_addr.delete(0,END)
+        new_addr.insert(0,chosenEnrollee.address)
+        new_addr.grid(row = 1, column = 1)
+        change_addr = partial(self.change_addr, new_addr, chosenEnrollee)
+        change_addr_btn = Button(change, text = "Change address", command=change_addr)
+        change_addr_btn.grid(columnspan = 2)
+        Label(change, text="------------------------------------------------------------").grid(columnspan = 2)
+        delete = partial(self.delete_enr, chosenEnrollee)
+        del_btn = Button(change, text = "Delete enrollee", command=delete)
+        del_btn.grid(columnspan = 2)
+
+    def change_addr(self, addr_entry, chosenEnrollee):
+        chosenEnrollee.change_address(addr_entry.get())
+        self.update_all(self.all_listbox)
+
+    def delete_enr(self, chosenEnrollee):
+        result = messagebox.askquestion("Delete", "Are You Sure?", icon='warning')
+        if result == 'yes':
+            chosenEnrollee.delete();
+        else:
+            return
+        self.update_all(self.all_listbox)

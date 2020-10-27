@@ -128,11 +128,11 @@ class ExamPage(Page):
 
     def all_list_on_click(self, event):
         cs = self.all_listbox.curselection()
-        messagebox.showinfo("Title", self.all_list[cs[0]].to_string())
+        self.manipulateExam(self.all_list[cs[0]])
 
     def find_list_on_click(self, event):
         cs = self.find_listbox.curselection()
-        messagebox.showinfo("Title", self.find_list[cs[0]].to_string())
+        self.manipulateExam(self.find_list[cs[0]])
 
     def find_enrollee_on_click(self, event):
         cs = self.enrollee_listbox.curselection()
@@ -143,3 +143,46 @@ class ExamPage(Page):
         cs = self.examiner_listbox.curselection()
         self.chosen_examiner = self.find_examiner_list[cs[0]]
         self.chosen_examiner_text.set(self.chosen_examiner.to_string())
+
+    def manipulateExam(self, chosenExam):
+        newWindow = Toplevel(self)
+        newWindow.title("New Window")
+        Label(newWindow, text="Date of pass: ").grid(row=1, column=0)
+        date = DateEntry(newWindow, width=12, background='darkblue', foreground='white', borderwidth=2,
+                         date_pattern='dd.mm.y')
+        date.grid(row=1, column=1)
+        Label(newWindow, text="Time of pass(HH:MM): ").grid(row=2, column=0)
+        time = Entry(newWindow, width=50)
+        time.grid(row=2, column=1, columnspan=2)
+        change_time = partial(self.change_time, date, time, chosenExam)
+        change_time_btn = Button(newWindow, text = "Change time", command=change_time)
+        change_time_btn.grid(columnspan = 3)
+        if chosenExam.status == 'Planned':
+            Label(newWindow, text="---------------------------------------------").grid(columnspan=3)
+            Label(newWindow, text="Pass exam").grid(row=4, columnspan=3)
+            Label(newWindow, text="Enter score: ").grid(row=5, column=0)
+            score = Entry(newWindow, width="39")
+            score.grid(row=5, column=1, columnspan=2)
+            change_sal = partial(self.finish_exam, score, chosenExam)
+            finish_exam_btn = Button(newWindow, text="Finish exam", command=change_sal)
+            finish_exam_btn.grid(row = 6, columnspan=3)
+        Label(newWindow, text="------------------------------------------------------------").grid(columnspan=3)
+        delete = partial(self.delete_exam, chosenExam)
+        del_btn = Button(newWindow, text="Delete exam", command=delete)
+        del_btn.grid(columnspan=3)
+
+    def change_time(self, date_entry, time_entry, chosenExam):
+        chosenExam.change_time(date_entry.get() + ' ' + time_entry.get())
+        self.update_all(self.all_listbox)
+
+    def finish_exam(self, score_entry, chosenExam):
+        chosenExam.finish(score_entry.get())
+        self.update_all(self.all_listbox)
+
+    def delete_exam(self, chosenExam):
+        result = messagebox.askquestion("Delete", "Are You Sure?", icon='warning')
+        if result == 'yes':
+            chosenExam.delete();
+        else:
+            return
+        self.update_all(self.all_listbox)
