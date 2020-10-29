@@ -25,7 +25,7 @@ class ExaminerPage(Page):
 
         find = Frame(self)
         find.pack(side=LEFT, fill=Y)
-        Label(find, text="Find enrollee").pack()
+        Label(find, text="Find examiner").pack()
         find_entry = Entry(find)
         find_entry.pack()
         self.find_listbox = Listbox(find, width=100)

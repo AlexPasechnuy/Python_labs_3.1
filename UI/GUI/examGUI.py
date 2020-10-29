@@ -30,7 +30,7 @@ class ExamPage(Page):
         find.pack(side=LEFT, fill=Y)
         Label(find, text="Find exam").pack()
         find_entry = DateEntry(find, width=12, background='darkblue', foreground='white', borderwidth=2,
-                               date_pattern='mm.dd.y')
+                               date_pattern='dd.mm.y')
         find_entry.pack()
         self.find_listbox = Listbox(find, width=100)
         self.find_listbox.bind('<Double-1>', self.find_list_on_click)
