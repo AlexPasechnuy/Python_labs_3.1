@@ -23,6 +23,8 @@ class ExamPage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
+        all_report = Button(all, text = "Export info about all exams in Excel")
+        all_report.pack(side="top")
 
         #################################################################################################
 
@@ -170,6 +172,9 @@ class ExamPage(Page):
         delete = partial(self.delete_exam, chosenExam)
         del_btn = Button(newWindow, text="Delete exam", command=delete)
         del_btn.grid(columnspan=3)
+        Label(newWindow, text="------------------------------------------------------------").grid(columnspan=2)
+        enr_report = Button(newWindow, text = "Export info about this exam in Word")
+        enr_report.grid(columnspan = 3)
 
     def change_time(self, date_entry, time_entry, chosenExam):
         chosenExam.change_time(date_entry.get() + ' ' + time_entry.get())

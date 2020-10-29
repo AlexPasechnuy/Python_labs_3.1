@@ -21,6 +21,8 @@ class EnrolleePage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
+        all_report = Button(all, text = "Export info about all enrollees in Excel")
+        all_report.pack(side="top")
 
         #################################################################################################
 
@@ -129,6 +131,9 @@ class EnrolleePage(Page):
         delete = partial(self.delete_enr, chosenEnrollee)
         del_btn = Button(change, text = "Delete enrollee", command=delete)
         del_btn.grid(columnspan = 2)
+        Label(change, text="------------------------------------------------------------").grid(columnspan=2)
+        enr_report = Button(change, text = "Export info about this enrollee in Word")
+        enr_report.grid(columnspan = 2)
 
     def change_addr(self, addr_entry, chosenEnrollee):
         chosenEnrollee.change_address(addr_entry.get())

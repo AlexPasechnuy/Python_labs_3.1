@@ -20,6 +20,8 @@ class ExaminerPage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
+        all_report = Button(all, text = "Export info about all examiners in Excel")
+        all_report.pack(side="top")
 
         #################################################################################################
 
@@ -118,6 +120,9 @@ class ExaminerPage(Page):
         delete = partial(self.delete_examiner, chosenExaminer)
         del_btn = Button(change, text = "Delete examiner", command=delete)
         del_btn.grid(columnspan = 2)
+        Label(change, text="------------------------------------------------------------").grid(columnspan=2)
+        enr_report = Button(change, text = "Export info about this examiner in Word")
+        enr_report.grid(columnspan = 2)
 
     def change_salary(self, sal_entry, chosenEnrollee):
         chosenEnrollee.change_payment(int(sal_entry.get()))
