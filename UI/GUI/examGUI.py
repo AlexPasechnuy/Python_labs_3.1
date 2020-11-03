@@ -209,6 +209,8 @@ class ExamPage(Page):
             ws.cell(row=i + 1, column=3).value = self.all_list[i].pass_time
             ws.cell(row=i + 1, column=4).value = self.all_list[i].status
             ws.cell(row=i + 1, column=5).value = self.all_list[i].score
+            ws.cell(row=i + 1, column=6).value = self.all_list[i].get_enrollee()
+            ws.cell(row=i + 1, column=7).value = self.all_list[i].get_examiner()
         wb.save('..\\..\\Reports\\All.xlsx')
 
     def exam_export(self, exam):
@@ -221,7 +223,8 @@ class ExamPage(Page):
         document.add_paragraph('Pass time: ' + exam.pass_time)
         document.add_paragraph('Status: ' + exam.status)
         document.add_paragraph('Score: ' + str(exam.score))
-        document.add_heading('Exams', level=1)
+        document.add_paragraph('Enrollee: ' + str(exam.get_enrollee()))
+        document.add_paragraph('Examiner: ' + str(exam.get_examiner()))
 
         document.save('..\\..\\Reports\\Exams\\'
                       + exam.exam_name + '.(' + str(exam.id) + ').docx')

@@ -161,10 +161,22 @@ class ExaminerPage(Page):
         document.add_paragraph('Name: ' + examiner.surname + ' ' + examiner.name + ' ' + examiner.patronymic)
         document.add_paragraph('Salary: ' + str(examiner.payment))
         document.add_heading('Exams', level=1)
-        for i in examiner.get_exams():
-            document.add_paragraph(
-                i.to_string(), style='List Bullet'
-            )
+        table = document.add_table(rows=1, cols=6)
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = 'ID'
+        hdr_cells[1].text = 'Name'
+        hdr_cells[2].text = 'Time'
+        hdr_cells[3].text = 'Status'
+        hdr_cells[4].text = 'Score'
+        hdr_cells[5].text = 'Enrollee'
+        for exam in examiner.get_exams():
+            row_cells = table.add_row().cells
+            row_cells[0].text = str(exam.id)
+            row_cells[1].text = exam.exam_name
+            row_cells[2].text = exam.pass_time
+            row_cells[3].text = exam.status
+            row_cells[4].text = str(exam.score)
+            row_cells[5].text = exam.get_enrollee()
 
         document.save('D:\\Alex\\Work\\Study\\Programming\\Python\\Python_labs_3.1\\Reports\\Examiners\\'
                       + examiner.surname + '.' + examiner.name[0] + '.' + examiner.patronymic[0] + '.(' + str(examiner.id) + ').docx')

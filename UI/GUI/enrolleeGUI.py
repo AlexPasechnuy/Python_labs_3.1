@@ -178,10 +178,22 @@ class EnrolleePage(Page):
         document.add_paragraph('Birthday: ' + enr.birthday)
         document.add_paragraph('Number of passport: ' + enr.passport)
         document.add_heading('Exams', level=1)
-        for i in enr.get_exams():
-            document.add_paragraph(
-                i.to_string(), style='List Bullet'
-            )
+        table = document.add_table(rows=1, cols=6)
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = 'ID'
+        hdr_cells[1].text = 'Name'
+        hdr_cells[2].text = 'Time'
+        hdr_cells[3].text = 'Status'
+        hdr_cells[4].text = 'Score'
+        hdr_cells[5].text = 'Examiner'
+        for exam in enr.get_exams():
+            row_cells = table.add_row().cells
+            row_cells[0].text = str(exam.id)
+            row_cells[1].text = exam.exam_name
+            row_cells[2].text = exam.pass_time
+            row_cells[3].text = exam.status
+            row_cells[4].text = str(exam.score)
+            row_cells[5].text = exam.get_examiner()
 
         document.save('..\\..\\Reports\\Enrollees\\'
                       + enr.surname + '.' + enr.name[0] + '.' + enr.patronymic[0] + '.(' + str(enr.id) + ').docx')
