@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-
-from tkcalendar import Calendar, DateEntry
+from docx import Document
+import openpyxl
 
 from UI.GUI.page import Page
 from Model.examiner import Examiner
@@ -20,7 +20,7 @@ class ExaminerPage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
-        all_report = Button(all, text = "Export info about all examiners in Excel")
+        all_report = Button(all, text = "Export info about all examiners in Excel", command=self.all_export)
         all_report.pack(side="top")
 
         #################################################################################################
@@ -121,8 +121,9 @@ class ExaminerPage(Page):
         del_btn = Button(change, text = "Delete examiner", command=delete)
         del_btn.grid(columnspan = 2)
         Label(change, text="------------------------------------------------------------").grid(columnspan=2)
-        enr_report = Button(change, text = "Export info about this examiner in Word")
-        enr_report.grid(columnspan = 2)
+        examiner_export = partial(self.examiner_export, chosenExaminer)
+        examiner_report = Button(change, text = "Export info about this examiner in Word", command=examiner_export)
+        examiner_report.grid(columnspan = 2)
 
     def change_salary(self, sal_entry, chosenEnrollee):
         chosenEnrollee.change_payment(int(sal_entry.get()))
@@ -135,3 +136,35 @@ class ExaminerPage(Page):
         else:
             return
         self.update_all(self.all_listbox)
+
+    def all_export(self):
+        wb = openpyxl.load_workbook('..\\..\\Reports\\All.xlsx')
+        if 'Examiners' not in wb.sheetnames:
+            wb.create_sheet('Examiners')
+        ws = wb.get_sheet_by_name('Examiners')
+        ws.delete_cols(1, 6)
+        ws.delete_rows(1, 100)
+        for i in range (len(self.all_list)):
+            ws.cell(row=i + 1, column=1).value = self.all_list[i].id
+            ws.cell(row=i + 1, column=2).value = self.all_list[i].surname
+            ws.cell(row=i + 1, column=3).value = self.all_list[i].name
+            ws.cell(row=i + 1, column=4).value = self.all_list[i].patronymic
+            ws.cell(row=i + 1, column=5).value = self.all_list[i].payment
+        wb.save('..\\..\\Reports\\All.xlsx')
+
+    def examiner_export(self, examiner):
+        document = Document()
+
+        document.add_heading((examiner.surname + ' ' + examiner.name + ' ' + examiner.patronymic + "(Examiner)"), 0)
+        document.add_heading('Overall information', level=1)
+        document.add_paragraph('ID: ' + str(examiner.id))
+        document.add_paragraph('Name: ' + examiner.surname + ' ' + examiner.name + ' ' + examiner.patronymic)
+        document.add_paragraph('Salary: ' + str(examiner.payment))
+        document.add_heading('Exams', level=1)
+        for i in examiner.get_exams():
+            document.add_paragraph(
+                i.to_string(), style='List Bullet'
+            )
+
+        document.save('D:\\Alex\\Work\\Study\\Programming\\Python\\Python_labs_3.1\\Reports\\Examiners\\'
+                      + examiner.surname + '.' + examiner.name[0] + '.' + examiner.patronymic[0] + '.(' + str(examiner.id) + ').docx')

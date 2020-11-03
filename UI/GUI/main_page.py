@@ -1,19 +1,3 @@
-# import tkinter
-# #
-# # top = tkinter.Tk()
-# # text = tkinter.Label(top, text = "Select type to work with")
-# # enrollee = tkinter.Button(top,text="Enrollee",
-# #                       command=top.quit)
-# # examiner = tkinter.Button(top,text="Examiner",
-# #                       command=top.quit)
-# # exam = tkinter.Button(top,text="Exam",
-# #                       command=top.quit)
-# # text.pack()
-# # enrollee.pack()
-# # examiner.pack()
-# # exam.pack()
-# # tkinter.mainloop()
-
 from tkinter import *
 from tkinter.ttk import Notebook
 

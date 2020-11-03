@@ -1,6 +1,9 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+
+import openpyxl
+from docx import Document
 from tkcalendar import Calendar, DateEntry
 from functools import partial
 from tkinter import messagebox
@@ -23,7 +26,7 @@ class ExamPage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
-        all_report = Button(all, text = "Export info about all exams in Excel")
+        all_report = Button(all, text = "Export info about all exams in Excel", command=self.all_export)
         all_report.pack(side="top")
 
         #################################################################################################
@@ -173,8 +176,9 @@ class ExamPage(Page):
         del_btn = Button(newWindow, text="Delete exam", command=delete)
         del_btn.grid(columnspan=3)
         Label(newWindow, text="------------------------------------------------------------").grid(columnspan=2)
-        enr_report = Button(newWindow, text = "Export info about this exam in Word")
-        enr_report.grid(columnspan = 3)
+        exam_export = partial(self.exam_export, chosenExam)
+        exam_report = Button(newWindow, text = "Export info about this exam in Word", command=exam_export)
+        exam_report.grid(columnspan = 3)
 
     def change_time(self, date_entry, time_entry, chosenExam):
         chosenExam.change_time(date_entry.get() + ' ' + time_entry.get())
@@ -191,3 +195,33 @@ class ExamPage(Page):
         else:
             return
         self.update_all(self.all_listbox)
+
+    def all_export(self):
+        wb = openpyxl.load_workbook('D:\\Alex\\Work\\Study\\Programming\\Python\\Python_labs_3.1\\Reports\\All.xlsx')
+        if 'Exams' not in wb.sheetnames:
+            wb.create_sheet('Exams')
+        ws = wb.get_sheet_by_name('Exams')
+        ws.delete_cols(1, 6)
+        ws.delete_rows(1, 100)
+        for i in range (len(self.all_list)):
+            ws.cell(row=i + 1, column=1).value = self.all_list[i].id
+            ws.cell(row=i + 1, column=2).value = self.all_list[i].exam_name
+            ws.cell(row=i + 1, column=3).value = self.all_list[i].pass_time
+            ws.cell(row=i + 1, column=4).value = self.all_list[i].status
+            ws.cell(row=i + 1, column=5).value = self.all_list[i].score
+        wb.save('..\\..\\Reports\\All.xlsx')
+
+    def exam_export(self, exam):
+        document = Document()
+
+        document.add_heading((exam.exam_name + "(Exam)"), 0)
+        document.add_heading('Overall information', level=1)
+        document.add_paragraph('ID: ' + str(exam.id))
+        document.add_paragraph('Name: ' + exam.exam_name)
+        document.add_paragraph('Pass time: ' + exam.pass_time)
+        document.add_paragraph('Status: ' + exam.status)
+        document.add_paragraph('Score: ' + str(exam.score))
+        document.add_heading('Exams', level=1)
+
+        document.save('..\\..\\Reports\\Exams\\'
+                      + exam.exam_name + '.(' + str(exam.id) + ').docx')

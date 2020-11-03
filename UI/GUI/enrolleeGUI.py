@@ -1,12 +1,13 @@
 from tkinter import *
 from tkinter import messagebox
-from tkcalendar import Calendar, DateEntry
+from tkcalendar import DateEntry
+from docx import Document
+import openpyxl
 
 from UI.GUI.page import Page
 from Model.enrollee import Enrollee
 from functools import partial
 
-import datetime as dt
 
 class EnrolleePage(Page):
     def __init__(self, *args, **kwargs):
@@ -21,7 +22,7 @@ class EnrolleePage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
-        all_report = Button(all, text = "Export info about all enrollees in Excel")
+        all_report = Button(all, text = "Export info about all enrollees in Excel", command=self.all_export)
         all_report.pack(side="top")
 
         #################################################################################################
@@ -132,7 +133,8 @@ class EnrolleePage(Page):
         del_btn = Button(change, text = "Delete enrollee", command=delete)
         del_btn.grid(columnspan = 2)
         Label(change, text="------------------------------------------------------------").grid(columnspan=2)
-        enr_report = Button(change, text = "Export info about this enrollee in Word")
+        enr_export = partial(self.enr_export, chosenEnrollee)
+        enr_report = Button(change, text = "Export info about this enrollee in Word", command=enr_export)
         enr_report.grid(columnspan = 2)
 
     def change_addr(self, addr_entry, chosenEnrollee):
@@ -146,3 +148,40 @@ class EnrolleePage(Page):
         else:
             return
         self.update_all(self.all_listbox)
+
+    def all_export(self):
+        wb = openpyxl.load_workbook('D:\\Alex\\Work\\Study\\Programming\\Python\\Python_labs_3.1\\Reports\\All.xlsx')
+        if 'Enrollees' not in wb.sheetnames:
+            wb.create_sheet('Enrollees')
+        ws = wb.get_sheet_by_name('Enrollees')
+        ws.delete_cols(1, 6)
+        ws.delete_rows(1, 100)
+        for i in range (len(self.all_list)):
+            ws.cell(row=i + 1, column=1).value = self.all_list[i].id
+            ws.cell(row=i + 1, column=2).value = self.all_list[i].surname
+            ws.cell(row=i + 1, column=3).value = self.all_list[i].name
+            ws.cell(row=i + 1, column=4).value = self.all_list[i].patronymic
+            ws.cell(row=i + 1, column=5).value = self.all_list[i].address
+            ws.cell(row=i + 1, column=6).value = self.all_list[i].birthday
+            ws.cell(row=i + 1, column=7).value = self.all_list[i].passport
+
+        wb.save('..\\..\\Reports\\All.xlsx')
+
+    def enr_export(self, enr):
+        document = Document()
+
+        document.add_heading((enr.surname + ' ' + enr.name + ' ' + enr.patronymic + "(Enrollee)"), 0)
+        document.add_heading('Overall information', level=1)
+        document.add_paragraph('ID: ' + str(enr.id))
+        document.add_paragraph('Name: ' + enr.surname + ' ' + enr.name + ' ' + enr.patronymic)
+        document.add_paragraph('Address: ' + enr.address)
+        document.add_paragraph('Birthday: ' + enr.birthday)
+        document.add_paragraph('Number of passport: ' + enr.passport)
+        document.add_heading('Exams', level=1)
+        for i in enr.get_exams():
+            document.add_paragraph(
+                i.to_string(), style='List Bullet'
+            )
+
+        document.save('..\\..\\Reports\\Enrollees\\'
+                      + enr.surname + '.' + enr.name[0] + '.' + enr.patronymic[0] + '.(' + str(enr.id) + ').docx')
