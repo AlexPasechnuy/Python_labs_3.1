@@ -68,6 +68,16 @@ class Exam:
         res += "Examiner: " + arr[0][0] + " " + arr[0][1] + " " + arr[0][2]
         return res
 
+    def get_enrollee(self):
+        self.cur.execute("SELECT surname, name, patronymic FROM enrollee WHERE enrollee_id = ?", (self.enrollee_id,))
+        arr = self.cur.fetchall()
+        return arr[0][0] + " " + arr[0][1] + " " + arr[0][2]
+
+    def get_examiner(self):
+        self.cur.execute("SELECT surname, name, patronymic FROM examiner WHERE examiner_id = ?", (self.examiner_id,))
+        arr = self.cur.fetchall()
+        return arr[0][0] + " " + arr[0][1] + " " + arr[0][2]
+
     @staticmethod
     def all():
         con = _sqlite3.connect("exams.db")
