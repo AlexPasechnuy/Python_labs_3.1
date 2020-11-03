@@ -22,8 +22,10 @@ class EnrolleePage(Page):
         for person in self.all_list:
             self.all_listbox.insert(END, person.to_string())
         self.all_listbox.pack(side="top", fill="both", expand=True)
-        all_report = Button(all, text = "Export info about all enrollees in Excel", command=self.all_export)
-        all_report.pack(side="top")
+        all_docx_report = Button(all, text = "Export info about all enrollees in docx files", command=self.all_docx_export)
+        all_docx_report.pack(side="top")
+        xlsx_report = Button(all, text = "Export info about all enrollees in Excel", command=self.xlsx_export)
+        xlsx_report.pack(side="top")
 
         #################################################################################################
 
@@ -149,7 +151,7 @@ class EnrolleePage(Page):
             return
         self.update_all(self.all_listbox)
 
-    def all_export(self):
+    def xlsx_export(self):
         wb = openpyxl.load_workbook('D:\\Alex\\Work\\Study\\Programming\\Python\\Python_labs_3.1\\Reports\\All.xlsx')
         if 'Enrollees' not in wb.sheetnames:
             wb.create_sheet('Enrollees')
@@ -166,6 +168,10 @@ class EnrolleePage(Page):
             ws.cell(row=i + 1, column=7).value = self.all_list[i].passport
 
         wb.save('..\\..\\Reports\\All.xlsx')
+
+    def all_docx_export(self):
+        for i in self.all_list:
+            self.enr_export(i)
 
     def enr_export(self, enr):
         document = Document()
