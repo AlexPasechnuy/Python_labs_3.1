@@ -3,17 +3,6 @@ import _sqlite3
 from Model.exam import Exam
 
 class Examiner:
-    def __init__(self, id):
-        self.con = _sqlite3.connect("exams.db")
-        self.cur = self.con.cursor()
-        self.id = id
-        self.cur.execute("SELECT * FROM examiner WHERE examiner_id = ?",id)
-        arr = self.cur.fetchall()
-        self.surname = arr[0]["surname"]
-        self.name = arr[0]["name"]
-        self.patronymic = arr[0]["patronymic"]
-        self.payment = arr[0]["payment"]
-
     def __init__(self, id, surname, name, patronymic, payment):
         self.con = _sqlite3.connect("exams.db")
         self.cur = self.con.cursor()
@@ -22,6 +11,18 @@ class Examiner:
         self.name = name
         self.patronymic = patronymic
         self.payment = payment
+
+    @staticmethod
+    def get_by_id(id):
+        con = _sqlite3.connect("exams.db")
+        cur = con.cursor()
+        cur.execute("SELECT * FROM examiner WHERE examiner_id = ?",(int(id),))
+        arr = cur.fetchall()
+        surname = arr[0][1]
+        name = arr[0][2]
+        patronymic = arr[0][3]
+        salary = arr[0][4]
+        return Examiner(id, surname, name, patronymic, salary)
 
     @staticmethod
     def create(surname, name, patronymic, payment):
@@ -45,7 +46,7 @@ class Examiner:
         self.con.commit()
 
     def to_string(self):
-        return self.surname + " " + self.name + " " + self.patronymic + '; \n' \
+        return str(self.id) + ". " + self.surname + " " + self.name + " " + self.patronymic + '; \n' \
                + "Payment: " + str(self.payment)
 
     @staticmethod

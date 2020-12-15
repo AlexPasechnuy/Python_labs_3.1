@@ -3,18 +3,32 @@ import _sqlite3
 from Model.exam import Exam
 
 class Enrollee:
-    def __init__(self, id):
-        self.con = _sqlite3.connect("exams.db")
-        self.cur = self.con.cursor()
-        self.id = id
-        self.cur.execute("SELECT * FROM enrolee WHERE enrollee_id = ?",id)
-        arr = self.cur.fetchall()
-        self.surname = arr[0]["surname"]
-        self.name = arr[0]["name"]
-        self.patronymic = arr[0]["patronymic"]
-        self.address = arr[0]["address"]
-        self.birthday = arr[0]["birthday"]
-        self.passport = arr[0]["passport"]
+    # def __init__(self, id):
+    #     self.con = _sqlite3.connect("exams.db")
+    #     self.cur = self.con.cursor()
+    #     self.id = id
+    #     self.cur.execute("SELECT * FROM enrollee WHERE enrollee_id = ?",id)
+    #     arr = self.cur.fetchall()
+    #     self.surname = arr[0]["surname"]
+    #     self.name = arr[0]["name"]
+    #     self.patronymic = arr[0]["patronymic"]
+    #     self.address = arr[0]["address"]
+    #     self.birthday = arr[0]["birthday"]
+    #     self.passport = arr[0]["passport"]
+
+    @staticmethod
+    def get_by_id(id):
+        con = _sqlite3.connect("exams.db")
+        cur = con.cursor()
+        cur.execute("SELECT * FROM enrollee WHERE enrollee_id = ?",(int(id),))
+        arr = cur.fetchall()
+        surname = arr[0][1]
+        name = arr[0][2]
+        patronymic = arr[0][3]
+        address = arr[0][4]
+        birthday = arr[0][5]
+        passport = arr[0][6]
+        return Enrollee(id, surname, name, patronymic, address, birthday, passport)
 
     def __init__(self, id, surname, name, patronymic, address, birthday, passport):
         self.con = _sqlite3.connect("exams.db")
@@ -49,7 +63,7 @@ class Enrollee:
         self.con.commit()
 
     def to_string(self):
-        return self.surname + " " + self.name + " " + self.patronymic + '; \n'\
+        return str(self.id) + ". " + self.surname + " " + self.name + " " + self.patronymic + '; \n'\
                + self.address + '; \n' + self.birthday + '; \n' + self.passport
 
     @staticmethod
@@ -88,6 +102,6 @@ class Enrollee:
             exams.append(Exam(rec[0], rec[1], rec[2], rec[3], rec[4], rec[5], rec[6]))
         return exams
 
-    def __del__(self):
-        self.cur.close()
-        self.con.close()
+    # def __del__(self):
+    #     self.cur.close()
+    #     self.con.close()

@@ -4,7 +4,7 @@ from tkcalendar import DateEntry
 from docx import Document
 import openpyxl
 
-from UI.GUI.page import Page
+from UI.TkinterGUI.page import Page
 from Model.enrollee import Enrollee
 from functools import partial
 

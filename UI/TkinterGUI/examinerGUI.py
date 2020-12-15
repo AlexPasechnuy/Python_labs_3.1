@@ -3,7 +3,7 @@ from tkinter import messagebox
 from docx import Document
 import openpyxl
 
-from UI.GUI.page import Page
+from UI.TkinterGUI.page import Page
 from Model.examiner import Examiner
 from functools import partial
 

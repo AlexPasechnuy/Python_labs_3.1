@@ -1,9 +1,9 @@
 from tkinter import *
 from tkinter.ttk import Notebook
 
-from UI.GUI.enrolleeGUI import EnrolleePage
-from UI.GUI.examinerGUI import ExaminerPage
-from UI.GUI.examGUI import ExamPage
+from UI.TkinterGUI.enrolleeGUI import EnrolleePage
+from UI.TkinterGUI.examinerGUI import ExaminerPage
+from UI.TkinterGUI.examGUI import ExamPage
 
 if __name__ == "__main__":
     root = Tk()

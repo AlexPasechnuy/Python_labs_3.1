@@ -1,19 +1,6 @@
 import _sqlite3
 
 class Exam:
-    def __init__(self, id):
-        self.con = _sqlite3.connect("exams.db")
-        self.cur = self.con.cursor()
-        self.id = id
-        self.cur.execute("SELECT * FROM exam WHERE exam_id = ?", (id,))
-        arr = self.cur.fetchall()
-        self.pass_time = arr[0]["pass_time"]
-        self.exam_name = arr[0]["exam_name"]
-        self.score = arr[0]["score"]
-        self.status = arr[0]["status"]
-        self.enrollee_id = arr[0]["enrollee_id"]
-        self.examiner_id = arr[0]["examiner_id"]
-
     def __init__(self, id, pass_time, exam_name, score, status, enrollee_id, examiner_id):
         self.con = _sqlite3.connect("exams.db")
         self.cur = self.con.cursor()
@@ -24,6 +11,20 @@ class Exam:
         self.status = status
         self.enrollee_id = enrollee_id
         self.examiner_id = examiner_id
+
+    @staticmethod
+    def get_by_id(id):
+        con = _sqlite3.connect("exams.db")
+        cur = con.cursor()
+        cur.execute("SELECT * FROM exam WHERE exam_id = ?", (id,))
+        arr = cur.fetchall()
+        pass_time = arr[0][1]
+        exam_name = arr[0][2]
+        score = arr[0][3]
+        status = arr[0][4]
+        enrollee_id = arr[0][5]
+        examiner_id = arr[0][6]
+        return Exam(id, pass_time, exam_name, score, status, enrollee_id, examiner_id)
 
     @staticmethod
     def create(pass_time , exam_name , score, enrollee_id , examiner_id):
@@ -56,7 +57,7 @@ class Exam:
         self.con.commit()
 
     def to_string(self):
-        res = self.exam_name + "; " + self.pass_time + "; "
+        res = str(self.id) + ". " + self.exam_name + "; " + self.pass_time + "; "
         res += self.status + "; "
         if self.status == "PASSED":
             res += str(self.score) + ' points; '

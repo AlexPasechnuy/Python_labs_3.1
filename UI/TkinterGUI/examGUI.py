@@ -8,7 +8,7 @@ from tkcalendar import Calendar, DateEntry
 from functools import partial
 from tkinter import messagebox
 
-from UI.GUI.page import Page
+from UI.TkinterGUI.page import Page
 from Model.exam import Exam
 from Model.enrollee import Enrollee
 from Model.examiner import Examiner
@@ -199,7 +199,7 @@ class ExamPage(Page):
         self.update_all(self.all_listbox)
 
     def xlsx_export(self):
-        wb = openpyxl.load_workbook('D:\\Alex\\Work\\Study\\Programming\\Python\\Python_labs_3.1\\Reports\\All.xlsx')
+        wb = openpyxl.load_workbook('..\\..\\Reports\\All.xlsx')
         if 'Exams' not in wb.sheetnames:
             wb.create_sheet('Exams')
         ws = wb.get_sheet_by_name('Exams')
